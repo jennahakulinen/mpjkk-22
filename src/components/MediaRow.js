@@ -1,14 +1,14 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 
 const MediaRow = ({file}) => {
+  console.log('MediaRow');
   return (
     <tr>
       <td>
-        <img src={file.thumbnails.w160} alt="Title" />
+        <img src={file.thumbnails.w160} alt="kissa" />
       </td>
       <td>
-        <h3>{file.title}</h3>
+        <h4>{file.title}</h4>
         <p>{file.description}</p>
       </td>
       <td>
@@ -19,7 +19,7 @@ const MediaRow = ({file}) => {
 };
 
 MediaRow.propTypes = {
-  file: PropTypes.object.isRequired,
+  file: PropTypes.object,
 };
 
 export default MediaRow;

@@ -1,4 +1,3 @@
-import React from 'react';
 import PropTypes from 'prop-types';
 import MediaRow from './MediaRow';
 
@@ -10,7 +9,6 @@ const MediaTable = ({mediaArray}) => {
         {mediaArray.map((item, index) => {
           return <MediaRow key={index} file={item} />;
         })}
-        <MediaRow />
       </tbody>
     </table>
   );
