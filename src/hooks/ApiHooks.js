@@ -42,7 +42,14 @@ const useMedia = () => {
 };
 
 const useUser = () => {
-  const getUser = () => {};
+  const getUser = async (token) => {
+    const fetchOptions = {
+      headers: {
+        'x-access-token': token,
+      },
+    };
+    return await fetchJson(baseUrl + 'users/user', fetchOptions);
+  };
 
   const postUser = async (inputs) => {
     const fetchOptions = {

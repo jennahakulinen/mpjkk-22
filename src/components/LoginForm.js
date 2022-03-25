@@ -1,5 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import PropTypes from 'prop-types';
+import {useNavigate} from 'react-router-dom';
 import {useLogin} from '../hooks/ApiHooks';
 import useForm from '../hooks/FormHooks';
 
@@ -10,12 +11,15 @@ const LoginForm = (props) => {
   };
 
   const {postLogin} = useLogin();
+  const navigate = useNavigate();
 
   const doLogin = async () => {
     console.log('doLogin');
     try {
       const userData = await postLogin(inputs);
       console.log(userData);
+      localStorage.setItem('token', userData.token);
+      navigate('/home');
     } catch (err) {
       alert(err.message);
     }

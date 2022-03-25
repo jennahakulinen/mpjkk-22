@@ -28,6 +28,7 @@ const RegisterForm = (props) => {
     alkuarvot
   );
   console.log(inputs);
+
   return (
     <form onSubmit={handleSubmit}>
       <input
