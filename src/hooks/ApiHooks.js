@@ -51,6 +51,15 @@ const useUser = () => {
     return await fetchJson(baseUrl + 'users/user', fetchOptions);
   };
 
+  const getUsername = async (username) => {
+    const checkUser = await fetchJson(baseUrl + 'users/username/' + username);
+    if (checkUser.available) {
+      return true;
+    } else {
+      throw new Error('Username not available');
+    }
+  };
+
   const postUser = async (inputs) => {
     const fetchOptions = {
       method: 'POST',
@@ -62,7 +71,7 @@ const useUser = () => {
     return await fetchJson(baseUrl + 'users', fetchOptions);
   };
 
-  return {getUser, postUser};
+  return {getUser, postUser, getUsername};
 };
 
 const useLogin = () => {

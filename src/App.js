@@ -6,6 +6,7 @@ import Home from './views/Home';
 import Login from './views/Login';
 import Profile from './views/Profile';
 import Single from './views/Single';
+import Logout from './views/Logout';
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/single" element={<Single />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
     </Router>
   );
