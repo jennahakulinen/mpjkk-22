@@ -12,10 +12,12 @@ const Profile = () => {
 
   const fetchAvatar = async () => {
     const avatars = await getTag('avatar_' + user.user_id);
-    setAvatar(avatars.pop());
+    const ava = avatars.pop();
+    ava.filename = mediaUrl + ava.filename;
+    setAvatar(ava);
   };
   useEffect(() => {
-    fetchAvatar(user);
+    fetchAvatar();
   }, [user]);
 
   return (
@@ -24,7 +26,10 @@ const Profile = () => {
       {user && (
         <ul>
           <li>
-            <img src={mediaUrl + avatar.filename} alt={user.username} />
+            <img
+              src={avatar.filename}
+              alt={`${user.username}'s profile image`}
+            />
           </li>
           <li>{user.username}</li>
           <li>{user.email}</li>
