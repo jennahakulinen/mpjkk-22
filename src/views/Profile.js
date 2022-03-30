@@ -12,6 +12,7 @@ const Profile = () => {
   useEffect(() => {
     fetchUser();
   }, []);
+
   console.log(user);
   return (
     <>

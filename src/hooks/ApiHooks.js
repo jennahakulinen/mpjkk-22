@@ -1,12 +1,11 @@
 // TODO: add necessary imports
+import {useEffect, useState} from 'react';
 import {baseUrl} from '../utils/variables';
-import {useState} from 'react';
-import {useEffect} from 'react';
 
 const fetchJson = async (url, options = {}) => {
   try {
     const response = await fetch(url, options);
-    const json = response.json();
+    const json = await response.json();
     if (response.ok) {
       return json;
     } else {
@@ -14,7 +13,7 @@ const fetchJson = async (url, options = {}) => {
       throw new Error(message);
     }
   } catch (err) {
-    throw new Error('fetchJson error', err.message);
+    throw new Error(err.message);
   }
 };
 
@@ -30,7 +29,7 @@ const useMedia = () => {
       );
       setMediaArray(allFiles);
     } catch (err) {
-      console.log('getMedia error', err.message);
+      alert(err.message);
     }
   };
 
