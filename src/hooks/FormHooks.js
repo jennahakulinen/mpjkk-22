@@ -10,10 +10,15 @@ const useForm = (callback, initState) => {
   };
   const handleInputChange = (event) => {
     event.persist();
-    setInputs((inputs) => ({
-      ...inputs,
-      [event.target.name]: event.target.value,
-    }));
+    console.log(event.target.files && event.target.files[0]);
+    setInputs((inputs) => {
+      return {
+        ...inputs,
+        [event.target.name]: event.target.files
+          ? event.target.files[0]
+          : event.target.value,
+      };
+    });
   };
   return {
     handleSubmit,

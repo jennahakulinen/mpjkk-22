@@ -1,5 +1,6 @@
 import {Button, Grid, Typography} from '@mui/material';
-// import {useNavigate} from 'react-router-dom';
+import {useMedia} from '../hooks/ApiHooks';
+import {useNavigate} from 'react-router-dom';
 import useForm from '../hooks/FormHooks';
 
 const Upload = () => {
@@ -8,11 +9,20 @@ const Upload = () => {
     description: '',
   };
 
-  // const navigate = useNavigate();
+  const {postMedia} = useMedia();
+
+  const navigate = useNavigate();
 
   const doUpload = async () => {
     try {
       console.log('doUpload');
+      const token = localStorage.getItem('token');
+      const formdata = new FormData();
+      formdata.append('title', inputs.title);
+      formdata.append('description', inputs.description);
+      formdata.append('file', inputs.file);
+      const mediaData = await postMedia(formdata, token);
+      confirm(mediaData.message) && navigate('/home');
     } catch (err) {
       alert(err.message);
     }
@@ -22,7 +32,9 @@ const Upload = () => {
     doUpload,
     alkuarvot
   );
+
   console.log(inputs);
+
   return (
     <Grid container>
       <Grid item xs={12}>
@@ -53,7 +65,7 @@ const Upload = () => {
           ></input>
 
           <Button fullWidth color="primary" type="submit" variant="contained">
-            Login
+            Upload
           </Button>
         </form>
       </Grid>
