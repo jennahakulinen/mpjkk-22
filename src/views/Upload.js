@@ -1,16 +1,16 @@
-import {Button, Grid, Typography} from '@mui/material';
+import {Button, CircularProgress, Grid, Typography} from '@mui/material';
 import {useMedia} from '../hooks/ApiHooks';
 import {useNavigate} from 'react-router-dom';
 import useForm from '../hooks/FormHooks';
+import {useState, useEffect} from 'react';
 
 const Upload = () => {
+  const [preview, setPreview] = useState('logo192.png');
   const alkuarvot = {
     title: '',
     description: '',
   };
-
-  const {postMedia} = useMedia();
-
+  const {postMedia, loading} = useMedia();
   const navigate = useNavigate();
 
   const doUpload = async () => {
@@ -32,6 +32,16 @@ const Upload = () => {
     doUpload,
     alkuarvot
   );
+
+  useEffect(() => {
+    if (inputs.file) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        setPreview(reader.result);
+      });
+      reader.readAsDataURL(inputs.file);
+    }
+  }, [inputs.file]);
 
   console.log(inputs);
 
@@ -62,11 +72,17 @@ const Upload = () => {
             type="file"
             name="file"
             accept="image/*, video/*, audio/*"
-          ></input>
+            onChange={handleInputChange}
+          />
+          <img src={preview} alt="preview" />
 
-          <Button fullWidth color="primary" type="submit" variant="contained">
-            Upload
-          </Button>
+          {loading ? (
+            <CircularProgress />
+          ) : (
+            <Button fullWidth color="primary" type="submit" variant="contained">
+              Upload
+            </Button>
+          )}
         </form>
       </Grid>
     </Grid>
