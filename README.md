@@ -9,7 +9,7 @@ In the project directory, you can run:
 ### `npm start`
 
 Runs the app in the development mode.\
-Open [Week 2 AJAX, Routing](https://users.metropolia.fi/~jennash/MPJKK/viikko2/AJAX_Routing/build/) to view it in your browser.
+Open [Week 3 Forms](https://users.metropolia.fi/~jennash/MPJKK/viikko3/Forms/build/) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.
