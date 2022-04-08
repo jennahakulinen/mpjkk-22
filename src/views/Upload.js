@@ -1,10 +1,17 @@
-import {Button, CircularProgress, Grid, Typography} from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  Grid,
+  Slider,
+  Typography,
+} from '@mui/material';
 import {useMedia, useTag} from '../hooks/ApiHooks';
 import {useNavigate} from 'react-router-dom';
 import useForm from '../hooks/FormHooks';
 import {useState, useEffect} from 'react';
 import {appID} from '../utils/variables';
-import {ValidatorForm, TextValidator} from 'react-material-ui-form-validator';
+import {ValidatorForm} from 'react-material-ui-form-validator';
+import {TextValidator} from 'react-material-ui-form-validator';
 
 const Upload = () => {
   const [preview, setPreview] = useState('logo192.png');
@@ -12,6 +19,14 @@ const Upload = () => {
     title: '',
     description: '',
   };
+
+  const filterarvot = {
+    brightness: 100,
+    contrast: 100,
+    saturation: 100,
+    sepia: 0,
+  };
+
   const {postMedia, loading} = useMedia();
   const {postTag} = useTag();
   const navigate = useNavigate();
@@ -19,14 +34,22 @@ const Upload = () => {
   const doUpload = async () => {
     try {
       console.log('doUpload');
+      // lisätään filtterit descriptioniin
+      const desc = {
+        description: inputs.description,
+        filters: filterInputs,
+      };
       const token = localStorage.getItem('token');
       const formdata = new FormData();
       formdata.append('title', inputs.title);
-      formdata.append('description', inputs.description);
+      formdata.append('description', JSON.stringify(desc));
       formdata.append('file', inputs.file);
       const mediaData = await postMedia(formdata, token);
       const tagData = await postTag(
-        {file_id: mediaData.file_id, tag: appID},
+        {
+          file_id: mediaData.file_id,
+          tag: appID,
+        },
         token
       );
       confirm(tagData.message) && navigate('/home');
@@ -40,6 +63,11 @@ const Upload = () => {
     alkuarvot
   );
 
+  const {inputs: filterInputs, handleInputChange: handleSliderChange} = useForm(
+    null,
+    filterarvot
+  );
+
   useEffect(() => {
     if (inputs.file) {
       const reader = new FileReader();
@@ -50,51 +78,121 @@ const Upload = () => {
     }
   }, [inputs.file]);
 
-  console.log(inputs);
+  console.log(inputs, filterInputs);
 
   return (
-    <Grid container>
-      <Grid item xs={12}>
-        <Typography component="h1" variant="h2" gutterBottom>
-          Login
-        </Typography>
+    <>
+      <Grid container>
+        <Grid item xs={12}>
+          <Typography component="h1" variant="h2" gutterBottom>
+            Upload
+          </Typography>
+        </Grid>
+
+        <Grid item xs={12}>
+          <ValidatorForm onSubmit={handleSubmit}>
+            <TextValidator
+              fullWidth
+              placeholder="title"
+              name="title"
+              onChange={handleInputChange}
+              value={inputs.title}
+            />
+            <TextValidator
+              fullWidth
+              placeholder="description"
+              name="description"
+              onChange={handleInputChange}
+              value={inputs.description}
+            />
+
+            <TextValidator
+              fullWidth
+              type="file"
+              name="file"
+              accept="image/*, video/*, audio/*"
+              onChange={handleInputChange}
+            />
+
+            {loading ? (
+              <CircularProgress />
+            ) : (
+              <Button
+                fullWidth
+                color="primary"
+                type="submit"
+                variant="contained"
+              >
+                Upload
+              </Button>
+            )}
+          </ValidatorForm>
+        </Grid>
       </Grid>
-
-      <Grid item xs={12}>
-        <ValidatorForm onSubmit={handleSubmit}>
-          <TextValidator
-            fullWidth
-            placeholder="title"
-            name="title"
-            onChange={handleInputChange}
-            value={inputs.title}
+      <Grid container>
+        <Grid item xs={12}>
+          <img
+            style={{
+              width: '100%',
+              filter: `
+              brightness(${filterInputs.brightness}%)
+              contrast(${filterInputs.contrast}%)
+              saturate(${filterInputs.saturation}%)
+              sepia(${filterInputs.sepia}%)
+              `,
+            }}
+            src={preview}
+            alt="preview"
           />
-          <TextValidator
-            fullWidth
-            placeholder="description"
-            name="description"
-            onChange={handleInputChange}
-            value={inputs.description}
-          />
-
-          <TextValidator
-            type="file"
-            name="file"
-            accept="image/*, video/*, audio/*"
-            onChange={handleInputChange}
-          />
-          <img src={preview} alt="preview" />
-
-          {loading ? (
-            <CircularProgress />
-          ) : (
-            <Button fullWidth color="primary" type="submit" variant="contained">
-              Upload
-            </Button>
-          )}
-        </ValidatorForm>
+        </Grid>
+        <Grid container>
+          <Grid item xs={12}>
+            <Slider
+              name="brightness"
+              min={0}
+              max={200}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handleSliderChange}
+              value={filterInputs.brightness}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Slider
+              name="contrast"
+              min={0}
+              max={200}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handleSliderChange}
+              value={filterInputs.contrast}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Slider
+              name="saturation"
+              min={0}
+              max={200}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handleSliderChange}
+              value={filterInputs.saturation}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Slider
+              name="sepia"
+              min={0}
+              max={100}
+              step={1}
+              valueLabelDisplay="on"
+              onChange={handleSliderChange}
+              value={filterInputs.sepia}
+            />
+          </Grid>
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 };
 

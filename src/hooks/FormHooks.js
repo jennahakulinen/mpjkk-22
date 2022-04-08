@@ -8,9 +8,10 @@ const useForm = (callback, initState) => {
     }
     callback();
   };
+
   const handleInputChange = (event) => {
-    event.persist();
-    console.log(event.target.files && event.target.files[0]);
+    event.persist && event.persist();
+
     setInputs((inputs) => {
       return {
         ...inputs,
@@ -20,10 +21,12 @@ const useForm = (callback, initState) => {
       };
     });
   };
+
   return {
     handleSubmit,
     handleInputChange,
     inputs,
   };
 };
+
 export default useForm;
