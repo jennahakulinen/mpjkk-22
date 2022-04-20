@@ -8,7 +8,7 @@ import {mediaUrl} from '../utils/variables';
 const MediaRow = ({file, userId, deleteMedia}) => {
   const {update, setUpdate} = useContext(MediaContext);
   const doDelete = () => {
-    const ok = confirm('Do juu delte?');
+    const ok = confirm('Are you sure?');
     if (ok) {
       try {
         const deleteInfo = deleteMedia(
