@@ -14,6 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import {AccountCircle, Badge, ContactMail} from '@mui/icons-material';
+import BackButton from '../components/BackButton';
 
 const Profile = () => {
   const {user} = useContext(MediaContext);
@@ -37,6 +38,7 @@ const Profile = () => {
 
   return (
     <>
+      <BackButton />
       <Typography component="h1" variant="h2">
         Profile
       </Typography>
@@ -45,14 +47,14 @@ const Profile = () => {
           <CardContent>
             <List>
               <ListItem>
-                <ListItemAvatar sx={{mx: 'auto', width: '100%'}}>
+                <ListItemAvatar sx={{width: '100%'}}>
                   <Avatar
                     variant="square"
                     src={avatar.filename}
                     imgProps={{
                       alt: `${user.username}'s profile image`,
                     }}
-                    sx={{mx: 'auto', width: '100%', height: '30vh'}}
+                    sx={{width: '100%', height: '30vh'}}
                   />
                 </ListItemAvatar>
               </ListItem>
