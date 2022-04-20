@@ -1,8 +1,7 @@
 // TODO: add necessary imports
-import {useEffect, useState} from 'react';
-import {appID, baseUrl} from '../utils/variables';
-import {useContext} from 'react';
+import {useContext, useEffect, useState} from 'react';
 import {MediaContext} from '../contexts/MediaContext';
+import {appID, baseUrl} from '../utils/variables';
 
 const fetchJson = async (url, options = {}) => {
   try {
@@ -27,10 +26,12 @@ const useMedia = (showAllFiles, userId) => {
     try {
       setLoading(true);
       let media = await useTag().getTag(appID);
-      // jos !showAllFiles filteröi kirjautuneen käyttäjän tiedostot media taulukkoon
+      // jos !showAllFiles, filteröi kirjautuneen
+      // käyttäjän tiedostot media taulukkoon
       if (!showAllFiles) {
         media = media.filter((file) => file.user_id === userId);
       }
+
       const allFiles = await Promise.all(
         media.map(async (file) => {
           return await fetchJson(`${baseUrl}media/${file.file_id}`);
@@ -64,14 +65,15 @@ const useMedia = (showAllFiles, userId) => {
       setLoading(false);
     }
   };
-  const deleteMedia = async (userId, token) => {
+
+  const deleteMedia = async (fileId, token) => {
     const fetchOptions = {
       method: 'DELETE',
       headers: {
         'x-access-token': token,
       },
     };
-    return await fetchJson(baseUrl + 'users/' + userId, fetchOptions);
+    return await fetchJson(baseUrl + 'media/' + fileId, fetchOptions);
   };
 
   return {mediaArray, postMedia, deleteMedia, loading};
